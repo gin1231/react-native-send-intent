@@ -285,13 +285,15 @@ public class RNSendIntentModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void openMaps(String query) {
-      Uri gmmIntentUri = Uri.parse("geo:0,0?q="+query);
+      Uri gmmIntentUri = Uri.parse("geo:"+query);
       Intent sendIntent = new Intent(android.content.Intent.ACTION_VIEW, gmmIntentUri);
-      sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+      // Create intent to show chooser
+      Intent chooser = Intent.createChooser(sendIntent, "Choose app");
 
       //Check that an app exists to receive the intent
       if (sendIntent.resolveActivity(this.reactContext.getPackageManager()) != null) {
-        this.reactContext.startActivity(sendIntent);
+        this.reactContext.startActivity(chooser);
       }
     }
 
